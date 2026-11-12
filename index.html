@@ -37,7 +37,7 @@
             align-items: center;
         }
 
-        /* Lienzo para el rastro fluido del cursor */
+        /* Lienzo para la estela de neón del cursor */
         #sparkle-canvas {
             position: fixed;
             inset: 0;
@@ -401,7 +401,7 @@
 </head>
 <body>
 
-    <!-- LIENZO DE RASTRO FLUIDO EN EL CURSOR -->
+    <!-- LIENZO DE ESTELA NEÓN EN EL CURSOR -->
     <canvas id="sparkle-canvas"></canvas>
 
     <!-- 1. PANTALLA CLICK ANYWHERE -->
@@ -496,14 +496,12 @@
         const START_SECOND = 12;
 
         // ==========================================
-        // 0. RASTRO FLUIDO Y SUAVE EN EL CURSOR
+        // 0. ESTELA DE LÍNEA NEÓN FLUIDA EN EL CURSOR
         // ==========================================
         const canvas = document.getElementById('sparkle-canvas');
         const ctx = canvas.getContext('2d');
-        let trail = [];
-        let lastX = null;
-        let lastY = null;
-        const greenPalette = ['#00ff66', '#10b981', '#69f0ae', '#34d399'];
+        const points = [];
+        const MAX_AGE = 38; // Duración suave de la cola antes de desvanecerse
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -513,59 +511,57 @@
         resizeCanvas();
 
         window.addEventListener('mousemove', (e) => {
-            if (lastX === null) {
-                lastX = e.clientX;
-                lastY = e.clientY;
-            }
-
-            const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-
-            // Solo suelta orbes suaves al moverse, sin saturar ni explotar
-            if (dist > 5) {
-                trail.push({
-                    x: e.clientX + (Math.random() - 0.5) * 5,
-                    y: e.clientY + (Math.random() - 0.5) * 5,
-                    size: Math.random() * 4 + 2.5,
-                    vx: (Math.random() - 0.5) * 0.3,       // Movimiento lateral mínimo
-                    vy: (Math.random() - 0.5) * 0.3 - 0.15, // Flota suavemente hacia arriba
-                    color: greenPalette[Math.floor(Math.random() * greenPalette.length)],
-                    alpha: 0.8,
-                    decay: Math.random() * 0.006 + 0.006    // Se desvanece lento y progresivo
-                });
-                lastX = e.clientX;
-                lastY = e.clientY;
-            }
+            points.push({
+                x: e.clientX,
+                y: e.clientY,
+                age: 0
+            });
         });
 
-        function animateTrail() {
+        function animateNeonTrail() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = trail.length - 1; i >= 0; i--) {
-                const p = trail[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vx *= 0.99;
-                p.vy *= 0.99;
-                p.alpha -= p.decay;
-                p.size *= 0.993;
 
-                if (p.alpha <= 0.01 || p.size <= 0.4) {
-                    trail.splice(i, 1);
-                    continue;
+            // Envejecer puntos y eliminar los antiguos
+            for (let i = points.length - 1; i >= 0; i--) {
+                points[i].age += 1;
+                if (points[i].age > MAX_AGE) {
+                    points.splice(i, 1);
                 }
-
-                ctx.save();
-                ctx.globalAlpha = p.alpha;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.shadowBlur = 14;
-                ctx.shadowColor = '#00ff66';
-                ctx.fill();
-                ctx.restore();
             }
-            requestAnimationFrame(animateTrail);
+
+            if (points.length > 1) {
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                for (let i = 1; i < points.length; i++) {
+                    const p0 = points[i - 1];
+                    const p1 = points[i];
+                    const life = 1 - (p1.age / MAX_AGE);
+
+                    // Halo exterior verde neón
+                    ctx.beginPath();
+                    ctx.moveTo(p0.x, p0.y);
+                    ctx.lineTo(p1.x, p1.y);
+                    ctx.strokeStyle = `rgba(0, 255, 102, ${life * 0.75})`;
+                    ctx.lineWidth = life * 7;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00ff66';
+                    ctx.stroke();
+
+                    // Núcleo interior brillante
+                    ctx.beginPath();
+                    ctx.moveTo(p0.x, p0.y);
+                    ctx.lineTo(p1.x, p1.y);
+                    ctx.strokeStyle = `rgba(185, 246, 202, ${life * 0.9})`;
+                    ctx.lineWidth = life * 2.2;
+                    ctx.shadowBlur = 0;
+                    ctx.stroke();
+                }
+            }
+
+            requestAnimationFrame(animateNeonTrail);
         }
-        animateTrail();
+        animateNeonTrail();
 
         // ==========================================
         // 1. ENTRADA SEGUNDO 12 + VOLUMEN PROGRESIVO
