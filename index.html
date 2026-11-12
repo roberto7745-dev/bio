@@ -12,7 +12,7 @@
     <meta property="og:title" content="Roberto (@roberto7745)">
     <meta property="og:description" content="Bienvenido a mi bio oficial.">
     <meta property="og:url" content="https://roberto7745.es">
-    <meta name="theme-color" content="#ff2a4b">
+    <meta name="theme-color" content="#00ff66">
 
     <!-- Fuente Pixel e Iconos -->
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,6 +35,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Lienzo para el rastro de purpurina verde del cursor */
+        #sparkle-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10000;
         }
 
         /* Pantalla "Click Anywhere" */
@@ -60,13 +68,14 @@
             font-family: 'Silkscreen', monospace;
             font-size: 1.8rem;
             letter-spacing: 1px;
-            text-shadow: 0 0 14px rgba(255, 255, 255, 0.55);
+            color: #00ff66;
+            text-shadow: 0 0 16px rgba(0, 255, 102, 0.65);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            50% { opacity: 0.35; }
         }
 
         /* Fondo de constelaciones */
@@ -89,20 +98,21 @@
             transform-style: preserve-3d;
         }
 
-        /* Cajas oscuras con borde rojizo */
+        /* Cajas oscuras con borde Verde Gaming */
         .box {
-            background: rgba(12, 12, 14, 0.84);
+            background: rgba(10, 14, 12, 0.84);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(175, 38, 55, 0.32);
+            border: 1px solid rgba(0, 255, 102, 0.28);
             border-radius: 8px;
             padding: 22px 26px;
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .box:hover {
-            border-color: rgba(235, 55, 75, 0.6);
+            border-color: rgba(0, 255, 102, 0.65);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85), 0 0 18px rgba(0, 255, 102, 0.14);
         }
 
         /* Caja 1: Perfil principal */
@@ -117,7 +127,8 @@
             top: 18px;
             left: 20px;
             font-size: 1.05rem;
-            color: #d1d5db;
+            color: #00ff66;
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
             display: flex;
             align-items: center;
             gap: 7px;
@@ -130,15 +141,15 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(0, 255, 102, 0.45);
+            box-shadow: 0 0 22px rgba(0, 255, 102, 0.25);
         }
 
         .username {
             font-family: 'Silkscreen', monospace;
             font-size: 1.95rem;
             margin-bottom: 6px;
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+            text-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
         }
 
         .subtitle {
@@ -157,12 +168,13 @@
             color: #ffffff;
             font-size: 1.65rem;
             transition: transform 0.2s, color 0.2s, text-shadow 0.2s;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         .social-icons a:hover {
             transform: scale(1.18);
-            color: #ff3b5c;
+            color: #00ff66;
+            text-shadow: 0 0 14px rgba(0, 255, 102, 0.8);
         }
 
         /* Caja 2: Portfolio Próximamente */
@@ -183,7 +195,8 @@
 
         .link-left i {
             font-size: 1.65rem;
-            color: #e5e7eb;
+            color: #00ff66;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
         }
 
         .link-text h3 {
@@ -199,12 +212,13 @@
         .soon-badge {
             font-family: 'Silkscreen', monospace;
             font-size: 0.75rem;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.45);
-            color: #fca5a5;
+            background: rgba(0, 255, 102, 0.12);
+            border: 1px solid rgba(0, 255, 102, 0.45);
+            color: #69f0ae;
             padding: 5px 10px;
             border-radius: 5px;
             letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
         }
 
         /* Caja 3: Estado de Discord en vivo */
@@ -264,8 +278,8 @@
         .add-discord-btn {
             text-decoration: none;
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 255, 102, 0.08);
+            border: 1px solid rgba(0, 255, 102, 0.25);
             padding: 9px 15px;
             border-radius: 6px;
             font-size: 0.95rem;
@@ -273,8 +287,9 @@
         }
 
         .add-discord-btn:hover {
-            background: rgba(255, 59, 92, 0.25);
-            border-color: #ff3b5c;
+            background: rgba(0, 255, 102, 0.22);
+            border-color: #00ff66;
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.35);
         }
 
         /* Caja 4: Reproductor de música + Volumen */
@@ -312,7 +327,7 @@
         }
 
         .vol-icon:hover {
-            color: #ef4444;
+            color: #00ff66;
         }
 
         .volume-slider {
@@ -331,9 +346,10 @@
             appearance: none;
             width: 11px;
             height: 11px;
-            background: #ef4444;
+            background: #00ff66;
             border-radius: 50%;
             cursor: pointer;
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
         }
 
         .player-controls {
@@ -357,9 +373,10 @@
         .progress-bar {
             height: 100%;
             width: 0%;
-            background: #b91c1c;
+            background: #10b981;
             border-radius: 4px;
             position: relative;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
         }
 
         .progress-bar::after {
@@ -369,18 +386,23 @@
             top: -3.5px;
             width: 12px;
             height: 12px;
-            background: #ef4444;
+            background: #00ff66;
             border-radius: 50%;
+            box-shadow: 0 0 8px #00ff66;
         }
 
         .play-btn {
             cursor: pointer;
-            color: #ef4444;
+            color: #00ff66;
             font-size: 1.05rem;
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.5);
         }
     </style>
 </head>
 <body>
+
+    <!-- LIENZO DE PURPURINA VERDE EN EL CURSOR -->
+    <canvas id="sparkle-canvas"></canvas>
 
     <!-- 1. PANTALLA CLICK ANYWHERE -->
     <div id="enter-screen">
@@ -444,7 +466,7 @@
         <div class="box music-box">
             <div class="music-header">
                 <div class="song-title">
-                    <i class="fa-solid fa-music" style="color: #ef4444;"></i>
+                    <i class="fa-solid fa-music" style="color: #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.5);"></i>
                     <span id="song-name">Ni borracho - Quevedo</span>
                 </div>
                 <div class="volume-controls">
@@ -473,6 +495,70 @@
         const DISCORD_ID = "701457608850276382";
         const START_SECOND = 12;
 
+        // ==========================================
+        // 0. EFECTO PURPURINA VERDE EN EL CURSOR
+        // ==========================================
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
+        let sparkles = [];
+        const greenPalette = ['#00ff66', '#39ff14', '#69f0ae', '#10b981', '#b9f6ca'];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 4; i++) {
+                sparkles.push({
+                    x: e.clientX + (Math.random() - 0.5) * 10,
+                    y: e.clientY + (Math.random() - 0.5) * 10,
+                    size: Math.random() * 4 + 1.5,
+                    vx: (Math.random() - 0.5) * 2.2,
+                    vy: (Math.random() - 0.5) * 2.2 + 0.8, // Ligera caída
+                    color: greenPalette[Math.floor(Math.random() * greenPalette.length)],
+                    alpha: 1,
+                    decay: Math.random() * 0.03 + 0.025 // Desvanecimiento rápido
+                });
+            }
+        });
+
+        function animateSparkles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                const p = sparkles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05; // Gravedad suave
+                p.alpha -= p.decay;
+                p.size *= 0.97;
+
+                if (p.alpha <= 0 || p.size <= 0.3) {
+                    sparkles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#00ff66';
+
+                // Dibuja destellos con forma de diamante/purpurina
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.alpha * 4);
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+            }
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+
+        // ==========================================
+        // 1. ENTRADA SEGUNDO 12 + VOLUMEN PROGRESIVO
+        // ==========================================
         const enterScreen = document.getElementById('enter-screen');
         const audio = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-btn');
@@ -480,7 +566,6 @@
         const volIcon = document.getElementById('vol-icon');
         let fadeInterval = null;
 
-        // 1. Entrada en el segundo 12 con volumen progresivo (Fade-In)
         enterScreen.addEventListener('click', () => {
             enterScreen.classList.add('hidden');
             
@@ -499,7 +584,7 @@
                         } else {
                             audio.volume = currentVol;
                         }
-                    }, 90); // Sube progresivamente durante ~3 segundos
+                    }, 90);
                 }).catch(() => {});
             };
 
@@ -655,18 +740,18 @@
         fetchDiscordStatus();
         setInterval(fetchDiscordStatus, 15000);
 
-        // 6. Configuración del fondo de constelaciones (Particles.js)
+        // 6. Configuración del fondo de constelaciones en Verde Gaming (Particles.js)
         particlesJS("particles-js", {
             particles: {
                 number: { value: 60, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
+                color: { value: "#00ff66" },
                 opacity: { value: 0.35 },
                 size: { value: 2, random: true },
                 line_linked: {
                     enable: true,
                     distance: 150,
-                    color: "#ffffff",
-                    opacity: 0.22,
+                    color: "#00ff66",
+                    opacity: 0.2,
                     width: 1
                 },
                 move: { enable: true, speed: 1.2 }
