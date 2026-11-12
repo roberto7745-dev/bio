@@ -227,7 +227,7 @@
             height: 14px;
             border-radius: 50%;
             border: 2.5px solid #0c0c0e;
-            background-color: #747f8d; /* Offline por defecto */
+            background-color: #23a55a;
         }
 
         .discord-info h4 {
@@ -240,7 +240,7 @@
         .discord-info p {
             font-size: 0.82rem;
             color: #b0b3b8;
-            max-width: 200px;
+            max-width: 210px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -346,9 +346,9 @@
             <p class="subtitle">SysAdmin, Gaming & Hardware</p>
 
             <div class="social-icons">
-                <a href="https://discord.com/users/TU_ID_DE_DISCORD" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://discord.com/users/701457608850276382" target="_blank"><i class="fa-brands fa-discord"></i></a>
                 <a href="https://open.spotify.com/" target="_blank"><i class="fa-brands fa-spotify"></i></a>
-                <a href="https://github.com/" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://github.com/roberto7745-dev" target="_blank"><i class="fa-brands fa-github"></i></a>
             </div>
         </div>
 
@@ -364,7 +364,7 @@
             <i class="fa-solid fa-arrow-right"></i>
         </a>
 
-        <!-- Caja de Estado de Discord en Vivo (Lanyard) -->
+        <!-- Caja de Estado de Discord en Vivo -->
         <div class="box discord-box">
             <div class="discord-left">
                 <div class="discord-avatar-wrap">
@@ -373,10 +373,10 @@
                 </div>
                 <div class="discord-info">
                     <h4 id="discord-user">@roberto7745</h4>
-                    <p id="discord-status">Cargando estado...</p>
+                    <p id="discord-status">Online</p>
                 </div>
             </div>
-            <a id="discord-link" href="https://discord.com/users/TU_ID_DE_DISCORD" target="_blank" class="add-discord-btn">
+            <a id="discord-link" href="https://discord.com/users/701457608850276382" target="_blank" class="add-discord-btn">
                 Add on Discord
             </a>
         </div>
@@ -385,7 +385,7 @@
         <div class="box music-box">
             <div class="song-title">
                 <i class="fa-solid fa-volume-high"></i>
-                <span id="song-name">Ni Borracho - Quevedo</span>
+                <span id="song-name">Ni borracho - Quevedo</span>
             </div>
             <div class="player-controls">
                 <span id="current-time">00:00</span>
@@ -395,7 +395,6 @@
                 <span id="duration">00:00</span>
                 <i class="fa-solid fa-pause play-btn" id="play-btn"></i>
             </div>
-            <!-- Pon aquí el nombre de tu archivo .mp3 subido a GitHub -->
             <audio id="bg-music" src="musica.mp3" loop></audio>
         </div>
 
@@ -406,10 +405,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
     <script>
-        // ==========================================
-        // CONFIGURA TU ID DE DISCORD AQUÍ
-        // ==========================================
-        const DISCORD_ID = "701457608850276382"; // Ejemplo: "456789012345678901"
+        const DISCORD_ID = "701457608850276382";
 
         // 1. Pantalla "Click Anywhere" + Reproducir música
         const enterScreen = document.getElementById('enter-screen');
@@ -457,31 +453,59 @@
             }
         });
 
-        // 3. Contador de visitas real y gratuito
+        // 3. Contador de visitas real
         fetch('https://abacus.jasoncameron.dev/hit/roberto7745.es/views')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('view-count').textContent = data.value;
             })
             .catch(() => {
-                document.getElementById('view-count').textContent = "1337";
+                document.getElementById('view-count').textContent = "12";
             });
 
-        // 4. Estado de Discord en Tiempo Real con Lanyard API
-        async function fetchDiscordStatus() {
-            if (DISCORD_ID === "701457608850276382") return;
-            try {
-                const res = await fetch(`https://api.lanyard.rest/v1/users/${701457608850276382}`);
-                const { data } = await res.json();
-                if (!data) return;
+        // 4. Foto y Estado de Discord (Lanyard + Respaldo automático de Avatar)
+        function setAvatarImages(url) {
+            document.getElementById('discord-avatar').src = url;
+            document.getElementById('main-avatar').src = url;
+        }
 
-                // Foto de perfil y nombre
-                const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256`;
-                document.getElementById('discord-avatar').src = avatarUrl;
-                document.getElementById('main-avatar').src = avatarUrl;
+        async function loadFallbackAvatar() {
+            try {
+                // API pública que saca tu foto de Discord aunque no estés en Lanyard
+                const res = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${DISCORD_ID}`);
+                const user = await res.json();
+                if (user && user.avatar && user.avatar.link) {
+                    setAvatarImages(`${user.avatar.link}?size=256`);
+                }
+                if (user && user.username) {
+                    document.getElementById('discord-user').textContent = `@${user.username}`;
+                }
+            } catch (e) {
+                console.error("Fallback avatar error:", e);
+            }
+        }
+
+        async function fetchDiscordStatus() {
+            try {
+                const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+                const json = await res.json();
+
+                if (!json.success || !json.data) {
+                    // Si aún no has entrado a discord.gg/lanyard, carga tu foto igualmente
+                    await loadFallbackAvatar();
+                    return;
+                }
+
+                const data = json.data;
+                const avatarHash = data.discord_user.avatar;
+                if (avatarHash) {
+                    const ext = avatarHash.startsWith('a_') ? 'gif' : 'png';
+                    const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${avatarHash}.${ext}?size=256`;
+                    setAvatarImages(avatarUrl);
+                }
+
                 document.getElementById('discord-user').textContent = `@${data.discord_user.username}`;
 
-                // Color del circulito de estado
                 const statusColors = {
                     online: '#23a55a', // Verde
                     idle: '#f0b232',   // Ausente
@@ -490,7 +514,6 @@
                 };
                 document.getElementById('status-dot').style.backgroundColor = statusColors[data.discord_status] || '#80848e';
 
-                // Estado personalizado o juego actual
                 const customStatus = data.activities.find(a => a.type === 4);
                 const playingGame = data.activities.find(a => a.type === 0);
 
@@ -499,15 +522,21 @@
                 } else if (playingGame) {
                     document.getElementById('discord-status').textContent = `Jugando a ${playingGame.name}`;
                 } else {
-                    document.getElementById('discord-status').textContent = data.discord_status === 'offline' ? 'Offline' : 'Online';
+                    const statusLabels = {
+                        online: 'En línea',
+                        idle: 'Ausente',
+                        dnd: 'No molestar',
+                        offline: 'Desconectado'
+                    };
+                    document.getElementById('discord-status').textContent = statusLabels[data.discord_status] || 'En línea';
                 }
             } catch (err) {
-                console.error("Error cargando Lanyard:", err);
+                await loadFallbackAvatar();
             }
         }
 
         fetchDiscordStatus();
-        setInterval(fetchDiscordStatus, 15000); // Actualiza cada 15 segundos
+        setInterval(fetchDiscordStatus, 15000);
 
         // 5. Configuración del fondo de constelaciones (Particles.js)
         particlesJS("particles-js", {
