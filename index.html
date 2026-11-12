@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@roberto7745</title>
+
+    <!-- Embed para Discord -->
+    <meta property="og:title" content="Roberto (@roberto7745)">
+    <meta property="og:description" content="Bienvenido a mi bio oficial.">
+    <meta property="og:url" content="https://roberto7745.es">
+    <meta name="theme-color" content="#ff2a4b">
+
+    <!-- Fuente Pixel (Estilo e-z.bio) e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pixelify Sans', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Pantalla "Click Anywhere" */
+        #enter-screen {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #enter-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #enter-screen h2 {
+            font-family: 'Silkscreen', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Fondo de constelaciones */
+        #particles-js {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+
+        /* Contenedor 3D (Tilt) */
+        .bio-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 470px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transform-style: preserve-3d;
+        }
+
+        /* Estilo de las cajas oscuras con borde rojizo tenue */
+        .box {
+            background: rgba(12, 12, 14, 0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(160, 35, 50, 0.28);
+            border-radius: 6px;
+            padding: 18px 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            transition: border-color 0.3s ease;
+        }
+
+        .box:hover {
+            border-color: rgba(220, 50, 70, 0.55);
+        }
+
+        /* Caja 1: Perfil principal */
+        .profile-box {
+            position: relative;
+            text-align: center;
+            padding: 28px 20px 22px;
+        }
+
+        .views {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            font-size: 0.9rem;
+            color: #d1d5db;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Silkscreen', monospace;
+        }
+
+        .main-avatar {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .username {
+            font-family: 'Silkscreen', monospace;
+            font-size: 1.55rem;
+            margin-bottom: 4px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #b0b3b8;
+            margin-bottom: 16px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .social-icons a {
+            color: #ffffff;
+            font-size: 1.35rem;
+            transition: transform 0.2s, text-shadow 0.2s;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.15);
+            color: #ff3b5c;
+        }
+
+        /* Caja 2: Enlace destacado */
+        .link-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #ffffff;
+            padding: 14px 18px;
+        }
+
+        .link-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .link-left i {
+            font-size: 1.4rem;
+            color: #e5e7eb;
+        }
+
+        .link-text h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .link-text p {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        /* Caja 3: Estado de Discord en vivo */
+        .discord-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+        }
+
+        .discord-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .discord-avatar-wrap {
+            position: relative;
+            width: 52px;
+            height: 52px;
+        }
+
+        .discord-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2.5px solid #0c0c0e;
+            background-color: #747f8d; /* Offline por defecto */
+        }
+
+        .discord-info h4 {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .discord-info p {
+            font-size: 0.82rem;
+            color: #b0b3b8;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .add-discord-btn {
+            text-decoration: none;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .add-discord-btn:hover {
+            background: rgba(255, 59, 92, 0.25);
+            border-color: #ff3b5c;
+        }
+
+        /* Caja 4: Reproductor de música */
+        .music-box {
+            padding: 14px 18px;
+        }
+
+        .song-title {
+            font-size: 0.88rem;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Silkscreen', monospace;
+            font-size: 0.72rem;
+            color: #d1d5db;
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #b91c1c;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -3px;
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .play-btn {
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PANTALLA CLICK ANYWHERE -->
+    <div id="enter-screen">
+        <h2>Click Anywhere</h2>
+    </div>
+
+    <!-- 2. FONDO DE PARTÍCULAS -->
+    <div id="particles-js"></div>
+
+    <!-- 3. CONTENEDOR CON EFECTO 3D AL MOVER EL RATÓN -->
+    <div class="bio-wrapper" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000">
+        
+        <!-- Tarjeta Principal -->
+        <div class="box profile-box">
+            <div class="views">
+                <i class="fa-regular fa-eye"></i>
+                <span id="view-count">...</span>
+            </div>
+
+            <img id="main-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" class="main-avatar">
+            <h1 class="username">Roberto</h1>
+            <p class="subtitle">SysAdmin, Gaming & Hardware</p>
+
+            <div class="social-icons">
+                <a href="https://discord.com/users/TU_ID_DE_DISCORD" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://open.spotify.com/" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+                <a href="https://github.com/" target="_blank"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+
+        <!-- Enlace Personalizado -->
+        <a href="https://roberto7745.es" target="_blank" class="box link-box">
+            <div class="link-left">
+                <i class="fa-solid fa-user-astronaut"></i>
+                <div class="link-text">
+                    <h3>Proyectos & Setup</h3>
+                    <p>https://roberto7745.es</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <!-- Caja de Estado de Discord en Vivo (Lanyard) -->
+        <div class="box discord-box">
+            <div class="discord-left">
+                <div class="discord-avatar-wrap">
+                    <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord" class="discord-avatar">
+                    <span id="status-dot" class="status-dot"></span>
+                </div>
+                <div class="discord-info">
+                    <h4 id="discord-user">@roberto7745</h4>
+                    <p id="discord-status">Cargando estado...</p>
+                </div>
+            </div>
+            <a id="discord-link" href="https://discord.com/users/TU_ID_DE_DISCORD" target="_blank" class="add-discord-btn">
+                Add on Discord
+            </a>
+        </div>
+
+        <!-- Reproductor de Música -->
+        <div class="box music-box">
+            <div class="song-title">
+                <i class="fa-solid fa-volume-high"></i>
+                <span id="song-name">Ni Borracho - Quevedo</span>
+            </div>
+            <div class="player-controls">
+                <span id="current-time">00:00</span>
+                <div class="progress-container" id="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <span id="duration">00:00</span>
+                <i class="fa-solid fa-pause play-btn" id="play-btn"></i>
+            </div>
+            <!-- Pon aquí el nombre de tu archivo .mp3 subido a GitHub -->
+            <audio id="bg-music" src="musica.mp3" loop></audio>
+        </div>
+
+    </div>
+
+    <!-- Librerías: Particles.js y Vanilla-Tilt.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <script>
+        // ==========================================
+        // CONFIGURA TU ID DE DISCORD AQUÍ
+        // ==========================================
+        const DISCORD_ID = "701457608850276382"; // Ejemplo: "456789012345678901"
+
+        // 1. Pantalla "Click Anywhere" + Reproducir música
+        const enterScreen = document.getElementById('enter-screen');
+        const audio = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-btn');
+
+        enterScreen.addEventListener('click', () => {
+            enterScreen.classList.add('hidden');
+            audio.volume = 0.35;
+            audio.play().catch(() => {});
+        });
+
+        // 2. Controles del Reproductor de Audio
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+
+        function formatTime(sec) {
+            if (isNaN(sec)) return "00:00";
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = Math.floor(sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${pct || 0}%`;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            audio.currentTime = (e.offsetX / width) * audio.duration;
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.className = 'fa-solid fa-pause play-btn';
+            } else {
+                audio.pause();
+                playBtn.className = 'fa-solid fa-play play-btn';
+            }
+        });
+
+        // 3. Contador de visitas real y gratuito
+        fetch('https://abacus.jasoncameron.dev/hit/roberto7745.es/views')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('view-count').textContent = data.value;
+            })
+            .catch(() => {
+                document.getElementById('view-count').textContent = "1337";
+            });
+
+        // 4. Estado de Discord en Tiempo Real con Lanyard API
+        async function fetchDiscordStatus() {
+            if (DISCORD_ID === "701457608850276382") return;
+            try {
+                const res = await fetch(`https://api.lanyard.rest/v1/users/${701457608850276382}`);
+                const { data } = await res.json();
+                if (!data) return;
+
+                // Foto de perfil y nombre
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256`;
+                document.getElementById('discord-avatar').src = avatarUrl;
+                document.getElementById('main-avatar').src = avatarUrl;
+                document.getElementById('discord-user').textContent = `@${data.discord_user.username}`;
+
+                // Color del circulito de estado
+                const statusColors = {
+                    online: '#23a55a', // Verde
+                    idle: '#f0b232',   // Ausente
+                    dnd: '#f23f43',    // No molestar
+                    offline: '#80848e' // Desconectado
+                };
+                document.getElementById('status-dot').style.backgroundColor = statusColors[data.discord_status] || '#80848e';
+
+                // Estado personalizado o juego actual
+                const customStatus = data.activities.find(a => a.type === 4);
+                const playingGame = data.activities.find(a => a.type === 0);
+
+                if (customStatus && customStatus.state) {
+                    document.getElementById('discord-status').textContent = customStatus.state;
+                } else if (playingGame) {
+                    document.getElementById('discord-status').textContent = `Jugando a ${playingGame.name}`;
+                } else {
+                    document.getElementById('discord-status').textContent = data.discord_status === 'offline' ? 'Offline' : 'Online';
+                }
+            } catch (err) {
+                console.error("Error cargando Lanyard:", err);
+            }
+        }
+
+        fetchDiscordStatus();
+        setInterval(fetchDiscordStatus, 15000); // Actualiza cada 15 segundos
+
+        // 5. Configuración del fondo de constelaciones (Particles.js)
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 55, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                opacity: { value: 0.35 },
+                size: { value: 2, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 145,
+                    color: "#ffffff",
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: { enable: true, speed: 1.2 }
+            },
+            interactivity: {
+                events: {
+                    onhover: { enable: true, mode: "grab" }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
