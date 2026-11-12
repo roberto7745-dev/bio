@@ -37,7 +37,7 @@
             align-items: center;
         }
 
-        /* Lienzo para el rastro de purpurina verde del cursor */
+        /* Lienzo para el rastro fluido del cursor */
         #sparkle-canvas {
             position: fixed;
             inset: 0;
@@ -401,7 +401,7 @@
 </head>
 <body>
 
-    <!-- LIENZO DE PURPURINA VERDE EN EL CURSOR -->
+    <!-- LIENZO DE RASTRO FLUIDO EN EL CURSOR -->
     <canvas id="sparkle-canvas"></canvas>
 
     <!-- 1. PANTALLA CLICK ANYWHERE -->
@@ -496,12 +496,14 @@
         const START_SECOND = 12;
 
         // ==========================================
-        // 0. EFECTO PURPURINA VERDE EN EL CURSOR
+        // 0. RASTRO FLUIDO Y SUAVE EN EL CURSOR
         // ==========================================
         const canvas = document.getElementById('sparkle-canvas');
         const ctx = canvas.getContext('2d');
-        let sparkles = [];
-        const greenPalette = ['#00ff66', '#39ff14', '#69f0ae', '#10b981', '#b9f6ca'];
+        let trail = [];
+        let lastX = null;
+        let lastY = null;
+        const greenPalette = ['#00ff66', '#10b981', '#69f0ae', '#34d399'];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -511,50 +513,59 @@
         resizeCanvas();
 
         window.addEventListener('mousemove', (e) => {
-            for (let i = 0; i < 4; i++) {
-                sparkles.push({
-                    x: e.clientX + (Math.random() - 0.5) * 10,
-                    y: e.clientY + (Math.random() - 0.5) * 10,
-                    size: Math.random() * 4 + 1.5,
-                    vx: (Math.random() - 0.5) * 2.2,
-                    vy: (Math.random() - 0.5) * 2.2 + 0.8, // Ligera caída
+            if (lastX === null) {
+                lastX = e.clientX;
+                lastY = e.clientY;
+            }
+
+            const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+
+            // Solo suelta orbes suaves al moverse, sin saturar ni explotar
+            if (dist > 5) {
+                trail.push({
+                    x: e.clientX + (Math.random() - 0.5) * 5,
+                    y: e.clientY + (Math.random() - 0.5) * 5,
+                    size: Math.random() * 4 + 2.5,
+                    vx: (Math.random() - 0.5) * 0.3,       // Movimiento lateral mínimo
+                    vy: (Math.random() - 0.5) * 0.3 - 0.15, // Flota suavemente hacia arriba
                     color: greenPalette[Math.floor(Math.random() * greenPalette.length)],
-                    alpha: 1,
-                    decay: Math.random() * 0.03 + 0.025 // Desvanecimiento rápido
+                    alpha: 0.8,
+                    decay: Math.random() * 0.006 + 0.006    // Se desvanece lento y progresivo
                 });
+                lastX = e.clientX;
+                lastY = e.clientY;
             }
         });
 
-        function animateSparkles() {
+        function animateTrail() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = sparkles.length - 1; i >= 0; i--) {
-                const p = sparkles[i];
+            for (let i = trail.length - 1; i >= 0; i--) {
+                const p = trail[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.05; // Gravedad suave
+                p.vx *= 0.99;
+                p.vy *= 0.99;
                 p.alpha -= p.decay;
-                p.size *= 0.97;
+                p.size *= 0.993;
 
-                if (p.alpha <= 0 || p.size <= 0.3) {
-                    sparkles.splice(i, 1);
+                if (p.alpha <= 0.01 || p.size <= 0.4) {
+                    trail.splice(i, 1);
                     continue;
                 }
 
                 ctx.save();
                 ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fillStyle = p.color;
-                ctx.shadowBlur = 8;
+                ctx.shadowBlur = 14;
                 ctx.shadowColor = '#00ff66';
-
-                // Dibuja destellos con forma de diamante/purpurina
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.alpha * 4);
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.fill();
                 ctx.restore();
             }
-            requestAnimationFrame(animateSparkles);
+            requestAnimationFrame(animateTrail);
         }
-        animateSparkles();
+        animateTrail();
 
         // ==========================================
         // 1. ENTRADA SEGUNDO 12 + VOLUMEN PROGRESIVO
